@@ -1,30 +1,23 @@
 # checkMembers.py
-import pygsheets
 import time
 import datetime
 import sys
 import gspread
-import shutil
 import json
 import os
 from oauth2client.service_account import ServiceAccountCredentials
 def checkMembers(spreadsheet,GooglePrivateKeyID,GooglePrivateKey):
 
-	# print(spreadsheet)
-	shutil.copy('client_secret.json', 'new_client_secret.json')
-	#adding google keys to json file
-	googData = {'private_key_id':GooglePrivateKeyID,
-				'private_key':GooglePrivateKey}
-	with open ('new_client_secret.json','a') as json_file:
+	with open('client_secret.json','r') as json_file:
 		data = json.load(json_file)
-		json.dump(googData,json_file)
-
+	data['private_key_id'] = GooglePrivateKeyID #adding secret keys to data struct temporarily
+	data['private_key'] = GooglePrivateKey.replace("\\n","\n") #THIS IS SO IMPORTANT
+	
 	scope = ['https://spreadsheets.google.com/feeds',
 		         'https://www.googleapis.com/auth/drive']
-
-	credentials = ServiceAccountCredentials.from_json_keyfile_name('new_client_secret.json', scope)
+	credentials = ServiceAccountCredentials.from_json_keyfile_dict(data,scopes=scope)
+	
 	gc = gspread.authorize(credentials)
-
 
 	now = datetime.datetime.now()
 	month = str(now.month)
