@@ -25,7 +25,6 @@ cycler==0.10.0
 Cython==0.25.2
 cytoolz==0.8.2
 dask==0.14.3
-datashape==0.5.4
 decorator==4.0.11
 discord==0.0.2
 discord.py==1.0.0a0
