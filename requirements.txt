@@ -128,8 +128,6 @@ QtPy==1.2.1
 requests==2.14.2
 rope-py3k==0.9.4.post1
 rsa==3.4.2
-scikit-image==0.13.0
-scikit-learn==0.18.1
 scipy==0.19.0
 seaborn==0.7.1
 simplegeneric==0.8.1
@@ -158,7 +156,6 @@ widgetsnbextension==2.0.0
 wrapt==1.10.10
 xlrd==1.0.0
 XlsxWriter==0.9.6
-xlwings==0.10.4
 xlwt==1.2.0
 yarl==1.2.6
 zict==0.1.2
