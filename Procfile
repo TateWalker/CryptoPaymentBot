@@ -1,2 +1,2 @@
-worker: npm start
+web: npm start
 pipinstall: pip install -r requirements.txt
