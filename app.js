@@ -1,4 +1,5 @@
 // Load up the discord.js library
+require('dotenv').config()
 const Discord = require("discord.js");
 var schedule = require('node-schedule');
 // This is your client. Some people call it `bot`, some people call it `self`, 
@@ -8,9 +9,14 @@ const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./apiKeys.json");
-var CoinIOKey = config.CoinIOKey;
-var CoinpaymentsKey = config.CoinpaymentsKey;
-var CoinpaymentsSecretKey = config.CoinpaymentsSecretKey;
+// var CoinIOKey = config.CoinIOKey;
+// var CoinpaymentsKey = config.CoinpaymentsKey;
+// var CoinpaymentsSecretKey = config.CoinpaymentsSecretKey;
+const CoinIOKey = process.env.COIN_IO_KEY;
+const CoinpaymentsKey = process.env.COINPAYMENTS_KEY;
+const CoinpaymentsSecretKey = process.env.COINPAYMENTS_SECRET_KEY;
+const GooglePrivateKeyID = process.env.GOOGLE_PRIVATE_KEY_ID;
+const GoogleKey = process.env.GOOGLE_PRIVATE_KEY;
 
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
@@ -20,13 +26,12 @@ client.on("ready", () => {
   // Example of changing the bot's playing game to something useful. `client.user` is what the
   // docs refer to as the "ClientUser".
   client.user.setActivity(`Serving ${client.guilds.size} servers`);
-
   // console.log(client.guilds)
-  schedule.scheduleJob('0 0 */24 * * *', function(fireDate) {
+  schedule.scheduleJob('0 0 *00 * * *', function(fireDate) {
     var PythonShell = require('python-shell');
     var options = {
       mode: 'text',
-      args: ['Fire Pit Purchases']
+      args: ['Fire Pit Purchases',GooglePrivateKeyID,GoogleKey]
     };
     PythonShell.run('checkMembers.py',options,function(err,results){
       if (err) throw err;
@@ -47,7 +52,7 @@ client.on("ready", () => {
     });
     options = {
       mode: 'text',
-      args: ['Voodoo Hut Purchases']
+      args: ['Voodoo Hut Purchases',GooglePrivateKeyID,GoogleKey]
     };        
     PythonShell.run('checkMembers.py',options,function(err,results){
       if (err) throw err;
@@ -162,7 +167,7 @@ client.on("message", async message => {
       var PythonShell = require('python-shell');
       var options = {
         mode: 'text',
-        args: [receiptNo, user, CoinpaymentsKey, CoinpaymentsSecretKey, CoinIOKey]
+        args: [receiptNo, user, CoinpaymentsKey, CoinpaymentsSecretKey, CoinIOKey, GooglePrivateKeyID, GoogleKey]
       };
       var pyshell = new PythonShell('cryptoBot.py',options);
       pyshell.on('message', function (reply) { 
@@ -205,5 +210,5 @@ client.on("message", async message => {
     }
   }
 });
-client.login(config.DiscordToken);
+client.login(process.env.DISCORD_TOKEN);
            

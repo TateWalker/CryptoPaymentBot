@@ -5,10 +5,11 @@ import json
 import time
 import zulu
 import sys
+
 API_KEY     = sys.argv[3]
 API_SECRET  = sys.argv[4]
-#IPN_URL = 'Your Callback URL'
-
+GoogleKeyID = sys.argv[6]
+GoogleKey = sys.argv[7]
 from datetime import datetime, timezone
 def exchangeRate(original,convert_to,time):
 	time = str(zulu.parse(time)) #put in proper format
@@ -39,42 +40,54 @@ client = CryptoPayments(API_KEY, API_SECRET)
 #CHANGE THIS
 receiptNo = sys.argv[1]
 # print(receiptNo)
+# --------
 tID = {'txid':receiptNo} #change this to input from bot
-transaction_info = client.getTransactionInfo(tID) #get transaction id record from provided id
+# transaction_info = client.getTransactionInfo(tID) #get transaction id record from provided id
+# --------
+
 # print("Getting Transaction ID")
 # print(transaction_info)
-curCoin = transaction_info.coin
 
-rate = exchangeRate(curCoin,'USD',transaction_info.time_created) #get exchange rate of coin received and usd
+# --------
+# curCoin = transaction_info.coin
+# rate = exchangeRate(curCoin,'USD',transaction_info.time_created) #get exchange rate of coin received and usd
 
-amountPaid = float(transaction_info.amountf)*rate
-if amountPaid > 199 and amountPaid < 201: #paying for firepit
-	transactionType = "Fire Pit Purchases"
-elif amountPaid > 997 and amountPaid < 1001: #paying for voodoo hut
-		transactionType = "Voodoo Hut Purchases"
+# amountPaid = float(transaction_info.amountf)*rate
+# if amountPaid > 199 and amountPaid < 201: #paying for firepit
+# 	transactionType = "Fire Pit Purchases"
+# elif amountPaid > 997 and amountPaid < 1001: #paying for voodoo hut
+# 		transactionType = "Voodoo Hut Purchases"
+# --------
 
 # print(time.time()-1296000) #they have 15 days to submit receipt
 # print(transaction_info.time_created)
 # print(str(transaction_info.amountf)+str(transaction_info.coin))
-if transaction_info.time_created < (time.time()-1296000):
-	timeCheck = False
-	print("Receipt already used")
-else:
-	timeCheck = True
-if transaction_info.status == 0:
-	statusCheck = True
-	print("Funds haven't been sent")
-elif transaction_info.status == 2:
-	statusCheck = True
-	print("Funds awaiting nightly delivery")
-elif transaction_info.status >=100:
-	statusCheck = True
-	print("Funds received!")
-else:
-	statusCheck = False
-	print('Issue with funds. Contact Kneedam')
+
+# --------
+# if transaction_info.time_created < (time.time()-1296000):
+# 	timeCheck = False
+# 	print("Receipt already used")
+# else:
+# 	timeCheck = True
+# if transaction_info.status == 0:
+# 	statusCheck = False
+# 	print("Funds haven't been sent")
+# elif transaction_info.status == 2:
+# 	statusCheck = True
+# 	print("Funds awaiting nightly delivery")
+# elif transaction_info.status >=100:
+# 	statusCheck = True
+# 	print("Funds received!")
+# else:
+# 	statusCheck = False
+# 	print('Issue with funds. Contact Kneedam')
+# --------
+transactionType = "Fire Pit Purchases"
+# transaction_info.time_created goes below in arg3
+timeCheck = True
+statusCheck = True
 import sheetsTest as sT
 if timeCheck and statusCheck:
-	present = sT.updateSheet(transactionType,tID['txid'],transaction_info.time_created,sys.argv[2])
+	present = sT.updateSheet(transactionType,tID['txid'],'2018-06-16 12:18:50',sys.argv[2],GoogleKeyID,GoogleKey)
 	if not present:
 		print(transactionType)

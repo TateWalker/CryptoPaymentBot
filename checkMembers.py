@@ -4,14 +4,25 @@ import time
 import datetime
 import sys
 import gspread
+import shutil
+import json
+import os
 from oauth2client.service_account import ServiceAccountCredentials
-def checkMembers(spreadsheet):
+def checkMembers(spreadsheet,GooglePrivateKeyID,GooglePrivateKey):
 
 	# print(spreadsheet)
+	shutil.copy('client_secret.json', 'new_client_secret.json')
+	#adding google keys to json file
+	googData = {'private_key_id':GooglePrivateKeyID,
+				'private_key':GooglePrivateKey}
+	with open ('new_client_secret.json','a') as json_file:
+		data = json.load(json_file)
+		json.dump(googData,json_file)
+
 	scope = ['https://spreadsheets.google.com/feeds',
 		         'https://www.googleapis.com/auth/drive']
 
-	credentials = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	credentials = ServiceAccountCredentials.from_json_keyfile_name('new_client_secret.json', scope)
 	gc = gspread.authorize(credentials)
 
 
@@ -50,6 +61,7 @@ def checkMembers(spreadsheet):
 		print(i)
 def main(spreadsheet):
 	expiredUsers = checkMembers(spreadsheet)
+	os.remove('new_client_secret.json')
 
 if __name__ == '__main__':
-	main(sys.argv[1])
+	main(sys.argv[1],sys.argv[2],sys.argv[3])

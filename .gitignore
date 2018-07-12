@@ -2,6 +2,8 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+.env
+new_client_secret.json
 client_secret.json
 apiKeys.json
 

@@ -1,19 +1,24 @@
-import pygsheets
 import time
 import datetime
 
-def updateSheet(spreadsheet,tID,startTime,user):
-	# print(tID)
-	import gspread
-	from oauth2client.service_account import ServiceAccountCredentials
-	# print(spreadsheet)
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import json
+def updateSheet(spreadsheet,tID,startTime,user,GooglePrivateKeyID,GooglePrivateKey):
+	#adding google keys to json file
+	
+
+	with open('client_secret.json','r') as json_file:
+		data = json.load(json_file)
+	data['private_key_id'] = GooglePrivateKeyID #adding secret keys to data struct temporarily
+	data['private_key'] = GooglePrivateKey.replace("\\n","\n") #THIS IS SO IMPORTANT
+	
 	scope = ['https://spreadsheets.google.com/feeds',
 		         'https://www.googleapis.com/auth/drive']
-
-	credentials = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-
+	credentials = ServiceAccountCredentials.from_json_keyfile_dict(data,scopes=scope)
+	
 	gc = gspread.authorize(credentials)
-
+	del data
 	now = datetime.datetime.now()
 	month = str(now.month)
 	year = str(now.year)
@@ -42,8 +47,10 @@ def updateSheet(spreadsheet,tID,startTime,user):
 			print('This receipt was used last month')
 
 	if not present:
-		endTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime+2592000))
-		startTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime))
+		# endTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime+2592000))
+		# startTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime))
+		endTime = 99999;
+		startTime = 11111;
 		values = [tID,startTime,endTime,user]
 		wks.append_row(values)
 	return present
