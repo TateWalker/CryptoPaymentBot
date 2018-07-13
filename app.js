@@ -165,10 +165,15 @@ client.on("message", async message => {
       if(args.length === 1){
       let receiptNo = args[0];
       let user = message.member.user.username;
+      let founderRole = message.guild.roles.find("name","Founder");
+      let founder = false;
+      if(message.member.roles.has(founderRole.id)){
+        founder = true;
+      }
       var PythonShell = require('python-shell');
       var options = {
         mode: 'text',
-        args: [receiptNo, user, CoinpaymentsKey, CoinpaymentsSecretKey, CoinIOKey, GooglePrivateKeyID, GoogleKey]
+        args: [receiptNo, user, CoinpaymentsKey, CoinpaymentsSecretKey, CoinIOKey, GooglePrivateKeyID, GoogleKey, founder]
       };
       var pyshell = new PythonShell('cryptoBot.py',options);
       pyshell.on('message', function (reply) { 
@@ -180,6 +185,7 @@ client.on("message", async message => {
         } 
         else {
           console.log('Adding role');
+          message.member.addRole(founderRole).catch(console.error);
           message.member.addRole(myRole).catch(console.error);
           message.channel.send("Congrats "+message.member+"! Welcome to the :fire:Firepit:fire:")
         }
@@ -191,6 +197,7 @@ client.on("message", async message => {
         }
         else {
           console.log('Adding role');
+          message.member.addRole(founderRole).catch(console.error);
           message.member.addRole(myRole).catch(console.error);
           message.channel.send("Congrats "+message.member+"! Welcome to the :crystal_ball:Voodoo Hut:crystal_ball:")
         }

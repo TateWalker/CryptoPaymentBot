@@ -52,9 +52,8 @@ def checkMembers(spreadsheet,GooglePrivateKeyID,GooglePrivateKey):
 				del[i] #remove them from expired users
 	for i in expiredUsers:
 		print(i)
-def main(spreadsheet):
-	expiredUsers = checkMembers(spreadsheet)
-	os.remove('new_client_secret.json')
+def main(spreadsheet,GooglePrivateKeyID,GooglePrivateKey):
+	checkMembers(spreadsheet,GooglePrivateKeyID,GooglePrivateKey)
 
 if __name__ == '__main__':
 	main(sys.argv[1],sys.argv[2],sys.argv[3])

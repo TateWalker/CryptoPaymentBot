@@ -47,10 +47,10 @@ def updateSheet(spreadsheet,tID,startTime,user,GooglePrivateKeyID,GooglePrivateK
 			print('This receipt was used last month')
 
 	if not present:
-		# endTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime+2592000))
-		# startTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime))
-		endTime = 99999;
-		startTime = 11111;
+		endTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime+2592000))
+		startTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(startTime))
+		# endTime = 99999;
+		# startTime = 11111; THIS WAS FOR TESTING
 		values = [tID,startTime,endTime,user]
 		wks.append_row(values)
 	return present
