@@ -12,7 +12,7 @@ python-dateutil==2.7.3
 pytimeparse==1.1.8
 pytz==2018.5
 requests==2.19.1
-rsa==3.4.2
+rsa==4.7
 six==1.11.0
 urllib3==1.23
 zulu==0.12.0
